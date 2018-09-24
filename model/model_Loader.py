@@ -23,6 +23,7 @@ def CreateModel(opt):
         model.reload(opt.count_epoch)
 
     if len(opt.gpu_ids) and torch.cuda.is_available():
+        print("CUDA version")
         model.G.cuda()
         model.D.cuda()
         if opt.is_Train:

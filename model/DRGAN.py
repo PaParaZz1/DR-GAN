@@ -76,7 +76,9 @@ class Single_DRGAN(BaseModel):
         self.image = torch.squeeze(torch.stack(self.image, dim = 0))
         self.batchsize = len(self.pose)
         self.pose = torch.LongTensor(self.pose)
-        self.frontal_pose = torch.LongTensor(np.random.randint(self.N_p, size = self.batchsize))
+        #self.frontal_pose = torch.LongTensor(np.random.randint(self.N_p, size = self.batchsize))
+        pose_list = [True for i in range(self.batchsize)]
+        self.frontal_pose = torch.LongTensor(pose_list)
 
         # if self.is_Train:
         self.input_pose = one_hot(self.frontal_pose, self.N_p)

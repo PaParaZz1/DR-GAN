@@ -26,10 +26,11 @@ class FDDataset(data.Dataset):
 
         if train:
             path = os.path.join(root, 'train')
+            imgs = make_dataset(path)
         else:
             path = os.path.join(root, 'test')
+            imgs = make_test_dataset(path)
 
-        imgs = make_dataset(path)
 
         if not single:
             imgs.sort(key=itemgetter('id'))
@@ -73,6 +74,50 @@ class FDDataset(data.Dataset):
         else:
             assert isinstance(item, list)
             return [self.dict2dict(i) for i in item]
+
+    def __len__(self):
+        return len(self.imgs)
+
+class MyDataset(data.Dataset):
+    def __init__(self, root, transform=None, train=True,
+                    loader=default_loader):
+
+        if train:
+            path = os.path.join(root, 'train')
+        else:
+            path = os.path.join(root, 'test')
+
+        imgs = make_dataset(path)
+
+
+        if len(imgs) == 0:
+            raise(RuntimeError("Found 0 images in: " + path + "\n"
+                               "Supported image extensions are: " +
+                               ",".join(IMG_EXTENSIONS)))
+
+        self.root = root
+        self.imgs = imgs
+        self.transform = transform
+        self.train = train
+        self.loader = loader
+
+    def dict2dict(self, sample):
+        identity = sample['id']
+        pose = sample['pose']
+        img = self.loader(sample['path'])
+        name = '{0}_{1}'.format(sample['id'], sample['name'])
+
+        if self.transform:
+            img = self.transform(img)
+
+        return {'image': img,
+                'identity': identity,
+                'pose': pose,
+                'name': name}
+
+    def __getitem__(self, idx):
+        item = self.imgs[idx]
+       	return self.dict2dict(item) 
 
     def __len__(self):
         return len(self.imgs)

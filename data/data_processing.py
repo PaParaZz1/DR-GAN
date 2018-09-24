@@ -46,6 +46,25 @@ def make_dataset(dir):
 
     return images
 
+def make_test_dataset(dir):
+    images = []
+    assert os.path.isdir(dir), '%s is not a valid directory' %dir
+
+    for root, _, fnames in sorted(os.walk(dir)):
+        for fname in fnames:
+            if is_image_file(fname):
+                path = os.path.join(root, fname)
+                id = get_id(path)
+                pose = get_pose(path)
+                if pose:
+                    continue
+                images.append({'path': path,
+                                'id': id,
+                                'pose': pose,
+                                'name': fname})
+
+    return images
+
 def split_with_same_id(samples):
     """
     split the list samples to sublists that with the same id.

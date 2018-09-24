@@ -14,8 +14,9 @@ def CreateDataLoader(opt):
     import sys
     sys.path.append('/mnt/lustre/niuyazhe/nyz/DG-GAN/data')
     from dataset import FDDataset
+    from dataset import MyDataset
     transform = transforms.Compose([
-        transforms.Resize((100, 100)),       #Switch to the transforms.Resize on the service
+        transforms.Resize((100, 100)),     
         transforms.RandomCrop(96),
         transforms.RandomHorizontalFlip(),
         transforms.ToTensor(),
@@ -23,7 +24,10 @@ def CreateDataLoader(opt):
     ])
 
     single = True if opt.model=='single' else False
-    dataset = FDDataset(root=opt.dataroot, train=opt.is_Train, transform=transform, single=single)
+    if opt.dataset == "cfp": 
+        dataset = FDDataset(root=opt.dataroot, train=opt.is_Train, transform=transform, single=single)
+    else: 
+        dataset = MyDataset(root=opt.dataroot, train=opt.is_Train, transform=transform, single=single)
 
 
     dataloader = DataLoader(dataset, batch_size=opt.batchsize, shuffle=opt.is_Train, num_workers=4, collate_fn=my_collate)

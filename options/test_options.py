@@ -6,4 +6,4 @@ class TestOptions(BaseOptions):
     def initialize(self):
         BaseOptions.initialize(self)
         self.is_Train = False
-        self.parser.add_argument('--batchsize', type=int, default=3, help='input batch size')
+        self.parser.add_argument('--batchsize', type=int, default=4, help='input batch size')
