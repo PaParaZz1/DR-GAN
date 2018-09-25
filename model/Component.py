@@ -10,6 +10,7 @@ def Tensor2Image(img):
     input (FloatTensor)
     output (PIL.Image)
     """
+    #if isinstance(img, numpy.ndarray):
     img = img.cpu()
     img = img * 0.5 + 0.5
     img = transforms.ToPILImage()(img)
@@ -259,8 +260,8 @@ class Generator(nn.Module):
 
     def forward(self, input, pose, noise):
         x = self.enc(input)
-        if x.size()[0] == 5:
-            x = x[:4]
+        if x.size()[0] != pose.size()[0]:
+            x = x[:pose.size()[0]]
         x = torch.cat((x, pose, noise), 1)
         x = self.dec(x)
         return x

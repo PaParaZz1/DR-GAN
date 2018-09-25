@@ -22,8 +22,8 @@ class BaseOptions(object):
         self.parser.add_argument('--output_nc', type=int, default=3, help='# of output image channels')
 
         self.parser.add_argument('--checkpoints_dir', type=str, default=checkpoints, help='models are saved here')
-        self.parser.add_argument('--pretrained_D', type=str, default='1000_net_single_D.path', help='the name of the pretrained discrimiator model to be loaded.')
-        self.parser.add_argument('--pretrained_G', type=str, default='1000_net_single_G.path', help='the name of the pretrained generator model to be loaded.')
+        self.parser.add_argument('--pretrained_D', type=str, default='465_net_D.path', help='the name of the pretrained discrimiator model to be loaded.')
+        self.parser.add_argument('--pretrained_G', type=str, default='465_net_G.path', help='the name of the pretrained generator model to be loaded.')
         self.parser.add_argument('--test_dir', type=str, default=result, help='the dir to save the result')
 
         self.parser.add_argument('--model', type=str, default='single', help='single/multi')

@@ -33,6 +33,7 @@ class Single_DRGAN(BaseModel):
         #self.D = nn.DataParallel(Discriminator(N_p=opt.N_p, N_d=opt.N_d))
         self.G = Generator(N_p=opt.N_p, N_z=opt.N_z)
         self.D = Discriminator(N_p=opt.N_p, N_d=opt.N_d)
+        self.batchsize = opt.batchsize
         if self.is_Train:
             self.optimizer_G = optim.Adam(self.G.parameters(), lr=opt.lr_G, betas=(opt.beta1, opt.beta2))
             self.optimizer_D = optim.Adam(self.D.parameters(), lr=opt.lr_D, betas=(opt.beta1, opt.beta2))
@@ -53,7 +54,7 @@ class Single_DRGAN(BaseModel):
         self.pose = []
         self.identity = []
         self.name = []
-        for i in range(len(input)):
+        for i in range(self.batchsize):
             self.image.append(input['image'][i])
             self.pose.append(input['pose'][i])
             self.identity.append(input['identity'][i])
@@ -73,8 +74,7 @@ class Single_DRGAN(BaseModel):
         test_pose (B): used for the test='initial learning rate
         """
         self.load_input(input)
-        self.image = torch.squeeze(torch.stack(self.image, dim = 0))
-        self.batchsize = len(self.pose)
+        self.image = torch.stack(self.image, dim = 0)
         self.pose = torch.LongTensor(self.pose)
         #self.frontal_pose = torch.LongTensor(np.random.randint(self.N_p, size = self.batchsize))
         pose_list = [True for i in range(self.batchsize)]
@@ -117,6 +117,11 @@ class Single_DRGAN(BaseModel):
         self.real = self.D(self.image)
         self.real_identity = self.real[:, :self.N_d+1]
         self.real_pose = self.real[:, self.N_d+1:]
+    def forward_np(self, input):
+        self.set_input(input)
+        self.syn_image = self.G(self.image, self.input_pose, self.noise)
+        filename = self.name[0]
+        return filename, self.syn_image.data
 
     def backward_G(self):
         self.Loss_G_syn_identity = self.criterion(self.syn_identity, self.identity)
@@ -151,7 +156,6 @@ class Single_DRGAN(BaseModel):
     def save(self, epoch):
         self.save_network(self.G, 'G', epoch, self.gpu_ids)
         self.save_network(self.D, 'D', epoch, self.gpu_ids)
-
     def save_result(self, epoch=None):
         for i, syn_img in enumerate(self.syn_image.data):
             img = self.image.data[i]
