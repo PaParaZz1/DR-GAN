@@ -14,7 +14,8 @@ sys.path.append('/mnt/lustre/niuyazhe/nyz/DR-GAN/model')
 from model_Loader import CreateModel
 from Component import Tensor2Image
 sys.path.append('/mnt/lustre/niuyazhe/nyz/DR-GAN/util')
-from argument import *
+from augmentation import *
+
 if __name__ == "__main__":
 	opt = TestOptions().parse()
 

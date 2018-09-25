@@ -27,7 +27,7 @@ def CreateDataLoader(opt):
     if opt.dataset == "cfp": 
         dataset = FDDataset(root=opt.dataroot, train=opt.is_Train, transform=transform, single=single)
     else: 
-        dataset = MyDataset(root=opt.dataroot, train=opt.is_Train, transform=transform, single=single)
+        dataset = MyDataset(root=opt.testroot, train=opt.is_Train, transform=transform, single=single)
 
 
     dataloader = DataLoader(dataset, batch_size=opt.batchsize, shuffle=opt.is_Train, num_workers=4, collate_fn=my_collate)

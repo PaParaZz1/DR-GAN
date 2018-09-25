@@ -80,7 +80,7 @@ class FDDataset(data.Dataset):
 
 class MyDataset(data.Dataset):
     def __init__(self, root, transform=None, train=True,
-                    loader=default_loader):
+                    loader=default_loader, single=True):
 
         if train:
             path = os.path.join(root, 'train')
