@@ -21,4 +21,4 @@ http://cvlab.cse.msu.edu/pdfs/Tran_Yin_Liu_CVPR2017.pdf
 ## more details
    You can read some comments in code or experiment_record.md for more details
   
-**If you have any questions please contact me with niuyazhe@buaa.edu.cn**
+**If you have any questions please come up with issue**
